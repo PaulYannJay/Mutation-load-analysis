@@ -2,7 +2,7 @@
 ##########
 ##
 ##
-##	This workflow allow to create data table table to produce the Sliding window PCA plot 
+##	This workflow allow to create data table to produce the Sliding window PCA plot 
 ## 
 ##
 #######################################
