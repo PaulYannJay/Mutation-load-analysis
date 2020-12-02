@@ -1,0 +1,13 @@
+To extract Gap sequence from aligment, TE annotate and format the file for analysis
+ 1. use LAST to map (Be careful map reference againt Focal individual and not the contrary : to have the individual un + direction )
+ 	~/Software/last-956/src/lastal -E0.0000000000000001 ReferenceGenomeDatabase GenomeToCompare > GenomeToCompare_vs_ReferenceGenomeDatabase.maf
+ 2. Use the R script FindGapLAST.R to detect the presence of GAP and Indicate the sample name.
+ 3. Use ./FiltreGapPos.pl to isolate the gap in the focal interval (./FiltreGapPos.pl -i  GapPos37vs38.txt -o GapPos37vs38.P1.txt -p P1pos) #Here, P1pos contain the position of the inversion P1 (or its equivalent uninverted) for each sample
+ 4. Use ExtractFastaPosMultiScaf_GapAnalysis.pl to extract the fasta sequence of these gap. (~/Code/ExtractFastaPosMultiScaf_Gap.pl -i Assembly37.fasta -o Gap.P1.Assembly37.fasta -f GapPos37vs38.P1.txt ) 
+ 4. use repeatMasker to annotate the files (for each genome comparison)
+ 5. Concatenate and reformate the output (including adding a column containing Sample name based on file name): for i in *Gap*fasta.out ; do base=${i%%.out} ; Inv=`echo $base | grep -o P[0-9]`; sample=`echo $base | grep -o ^[0-9][0-9]`; pos=$sample"_Gap"$Inv; echo $base ; echo -e "bit\tdiv\tdel\tins\tquery\tstartQuery\tEndQuery\tstart\tend\tLeft\trepeat\tclass\tname\tTEbeg\tTEend\tTEleft\tID\tsample" > $base.format.out ; sed 's/\s\+/\t/g' $i | sed 's/_/\t/' | sed 's/-/\t/' |  sed 's/^\t//g' | sed -n '4,$p' | sed 's/*//' | sed "s/$/$pos/" >> $base.format.out; done && for i in *Gap*format.out; do sed -n '2,$p' $i >> AllGapTE.out ; done #Manually copy paste the header
+6. Add the family for each detected TE: ~/Code/AddTEFamily.pl -i AllGapTE.out -o  AllGapTE.WithFam.out
+8. Determine the size of the region studied (sum of gap lenght, not including N') :for i in [0-9][0-9].Gap.P[1-3].fasta ; do echo $i >> SizeRegion.txt ; ~/Code/CountFastaNucleotideNonN.pl -i $i >> SizeRegion3.txt ; echo "">> SizeRegion.txt; done
+9. Add to the file the size of the region where repeat masker was apply (Inversion length or the concatenation of Gap lenght) ~/Code/AddSizeRegion.pl -s SizeRegion.txt -i AllGapTE.WithFam.out -o AllGapTE.WithFamWithRegionSize.out
+
+The process is similar to annotate file for Inversion and whole genome analysis but start at 4. 

@@ -1,0 +1,9 @@
+To compute divergence estimate at the inversion (to estimate inversion age, Fig1D), first run phylobaye on all 5kb window at the supergene. Then, to compute the TMRCA of a set of individuals, use for each window:
+ python ~/Code/GetIntestedNode.py Window1.labels -s P1_Homo_P2Homo  | xargs -I '{}' sed -n '/^{}/p' Window1.dates | cut -f2,4,5 >> Window1.dateTMRCA.txt # Here, applying the script to find, at the first window, the last common ancestor of sample that are homozygous for inversion P3, P2 and P1.
+ Then concatenate the result for each window (you will obtain something similar to Date_P1homo_P2Homo.txt) 
+
+ To compute the first common ancestor between two set of samples, use:
+ python ~/Code/GetFirstCommonAncestor.py -f window1.labels -s P1_Homo_P2Homo -p P1_HomoSs | xargs -I '{}' sed -n '/^{}/p' window1.dates | cut -f2,4,5| sort -n | sed -n '1p' >> Window1.DateFCA_P1homoP2homo_P1homoSs.txt ; done	 # # Here, applying the script to find, at the first window, the first common ancestor of sample that are homozygous for inversion P3, P2 and P1 and that are homozygous for the absence of inversion
+
+Then concatenate the result for each window and add the window position (you will obtain something similar to Date_P1homoP2homo_P1homoSs.txt) 
+The data can be plotted with InversionDivergence.R

@@ -1,0 +1,8 @@
+To perform DnDs analysis:
+1. annotate the vcf file with snpEff :
+	java -jar ~/Software/snpEff/snpEff.jar Hmel2 Hmel2.vcf.gz | bgzip > Hmel2.annotate.vcf.gz
+2. Transform to a genotype file
+	./VCF2GenoNumb.pl -i Hmel2.annotate.vcf.gz -o Hmel2.annotate.geno
+3. Count the number of mutation and their type in the genes you are interested in
+	./CountMutSubSlidingGeneV2.pl -i Hmel2.annotate.geno -o Hmel2.annotate.CountDnDs -g gene.pos
+4. Plot the data with the R script

@@ -3,6 +3,7 @@
 ##
 ##
 ##	This workflow allow to create data table to produce the Sliding window PCA plot 
+## 	Then, you can just plot the first axis of the PCA along the position to produce a Figure similar de Fig. 1B
 ## 
 ##
 #######################################
