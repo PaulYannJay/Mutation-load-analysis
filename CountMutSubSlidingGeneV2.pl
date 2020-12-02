@@ -42,7 +42,7 @@ while(<VCF>) #Only for the header
 		last;
 	} 
 
-while (<VCF>) # We slide along the genome, crossing gene position. for each SNP? we check if it is inside gene, and if it is the case, we incrememnt the mutation counter of this gene 
+while (<VCF>) # We slide along the genome, SNP by SNP, crossing gene positions. for each SNP, we check if it is inside a gene, and if it is the case, we incrememnt the mutation counters of this gene 
 {
 	$bool=0;
 	@Read=split(/[\t\n\b]+/,$_); #Split the line
@@ -50,7 +50,7 @@ while (<VCF>) # We slide along the genome, crossing gene position. for each SNP?
 	{
 		$bool=1;	#useless
 	}
-	else # The line is in a new gene, so we can print the data for the previous
+	else # The SNP is in a new gene, store its name 
 	{
 		HASHLOOP: for (keys %ArPos) #Find it which gene the SNP is
 		{
@@ -108,7 +108,7 @@ while (<VCF>) # We slide along the genome, crossing gene position. for each SNP?
 			{
 					next;
 			}
-			else # Pop containing at least one alternate allele but not fixed for this one # If this occurs, that mean that at least one individual is homozygous for the alternative allele while the others are homozygous for the ancetral allele # We are facing a polymorphic position
+			else # Pop containing at least one alternative allele but not fixed for this one # If this occurs, that mean that at least one individual is homozygous for the alternative allele while the others are homozygous for the ancetral allele # We are facing a polymorphic position
 			{
 				if ($Read[2] eq "missense")
 				{
